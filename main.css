@@ -1,0 +1,54 @@
+* {
+    padding:0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body {
+    background-color: #ffffff;
+    height: 80vh;
+}
+ul li {
+    margin: 0 1em;
+    list-style-type: none ;
+}
+
+ul#chat {
+    height: calc(100% - 50px);
+    max-height: calc(100% - 0px);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: scroll;
+}
+ul#chat li.system {
+    width: 100%;
+    color: red;
+    text-align: center;
+}
+ul#chat li.msg {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    text-align: right;
+    padding: 1em;
+}
+ul#chat li.msg span {
+    display: inline-block;
+    padding: 0 10px;
+}
+ul#chat li.msg.me {
+    flex-direction: row-reverse;
+    text-align: left;
+}
+form {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+}
+form input[type="text"] {
+    width: 80%;
+}
+
+form input[type="submit"] {
+    width: 20%;
+}

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="de_DE">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chat</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <button>Send a message</button>
+    <ol id="log">
+
+    </ol>
+
+    <script type="text/javascript">
+        var conn = new WebSocket('ws://127.0.0.1:8080/chat');
+        conn.onopen = function(ev) {
+            conn.send('hiho');
+        }
+        conn.onmessage = function(ev) {
+            let li=document.createElement('li');
+            li.innerText = ev.data;
+            document.getElementById('log').append(li);
+        }
+        document.querySelector('button').addEventListener('click',function() {
+           if (conn) {
+               let date = new Date();
+               conn.send(date.toLocaleDateString() + ' ' +  date.toLocaleTimeString() +' hallo');
+           }
+        });
+    </script>
+</body>
+</html>
