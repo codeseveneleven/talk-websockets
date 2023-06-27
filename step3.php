@@ -17,10 +17,13 @@ class MyChat implements MessageComponentInterface {
 	}
 
 	public function onMessage(ConnectionInterface $from, $msg) {
+
 		$payload = json_decode( $msg , true);
 		foreach($payload as $k=>$v) {
 			$payload[$k] = htmlspecialchars(strip_tags($v));
 		}
+		$msg = json_encode($payload);
+
 		switch($payload['action']) {
 			case 'login':
 				foreach ($this->clients as $client) {
