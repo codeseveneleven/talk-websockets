@@ -19,8 +19,7 @@ class MyChat implements MessageComponentInterface {
 	public function onMessage(ConnectionInterface $from, $msg) {
 		$payload = json_decode( $msg , true);
 		foreach($payload as $k=>$v) {
-			// https://twitter.com/pixeldesu/status/1555474256556969984
-			$payload[$k] = strip_tags( $v);
+			$payload[$k] = htmlspecialchars(strip_tags($v));
 		}
 		switch($payload['action']) {
 			case 'login':
