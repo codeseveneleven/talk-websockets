@@ -17,7 +17,7 @@
     </form>
 
     <script type="text/javascript">
-        var conn = new WebSocket('ws://\'127.0.0.1/chat');
+        var conn = new WebSocket('ws://127.0.0.1/chat');
         let nickname = '';
         conn.onopen = function(ev) {
             nickname = prompt('your nickname');
@@ -46,7 +46,12 @@
                     break;
                 case 'msg':
                     li.classList.add('msg');
-                    li.innerHTML = '<span>'+payload.nickname+'</span> <span>'+payload.msg+'</span>';
+                    let nick = document.createElement('span');
+                    let msg = document.createElement('span');
+                    nick.innerText = payload.nickname;
+                    msg.innerText = payload.msg;
+                    li.append(nick);
+                    li.append(msg);
                     if (payload.nickname === nickname) {
                         li.classList.add('me');
                     }

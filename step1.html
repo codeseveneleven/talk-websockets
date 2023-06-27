@@ -13,9 +13,9 @@
     </ol>
 
     <script type="text/javascript">
-        var conn = new WebSocket('ws://127.0.0.1 :8080/echo');
+        var conn = new WebSocket('ws://127.0.0.1:8080/echo');
         conn.onopen = function(ev) {
-            conn.send('hiho');
+            conn.send('hi ho');
         }
         conn.onmessage = function(ev) {
             let li=document.createElement('li');

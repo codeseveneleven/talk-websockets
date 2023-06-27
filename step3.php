@@ -9,7 +9,7 @@ class MyChat implements MessageComponentInterface {
 	protected $clients;
 
 	public function __construct() {
-		$this->clients = new \SplObjectStorage;
+		$this->clients = new SplObjectStorage;
 	}
 
 	public function onOpen(ConnectionInterface $conn) {
@@ -28,7 +28,7 @@ class MyChat implements MessageComponentInterface {
 					if ($client !== $from) {
 						$client->send( $msg );
 					} else {
-						$this->clients->setInfo(['nickname'=>$payload['nickname']]);
+						$this->clients->setInfo(['nickname'=>strip_tags($payload['nickname'])]);
 					}
 				}
 				break;
@@ -48,7 +48,7 @@ class MyChat implements MessageComponentInterface {
 			}
 		}
 		$this->clients->detach($conn);
-		if ($info) {
+		if ($info && $info['nickname']) {
 			foreach($this->clients as $client) {
 				$client->send(json_encode( ['action'=>'logoff','nickname'=>$info['nickname']]));
 			}
@@ -56,7 +56,7 @@ class MyChat implements MessageComponentInterface {
 
 	}
 
-	public function onError(ConnectionInterface $conn, \Exception $e) {
+	public function onError(ConnectionInterface $conn, Exception $e) {
 		$conn->close();
 	}
 }
