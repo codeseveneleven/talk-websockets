@@ -17,7 +17,7 @@
     </form>
 
     <script type="text/javascript">
-        var conn = new WebSocket('ws://127.0.0.1/chat');
+        var conn = new WebSocket('ws://127.0.0.1:8080/chat');
         let nickname = '';
         conn.onopen = function(ev) {
             nickname = prompt('your nickname');
