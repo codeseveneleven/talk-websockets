@@ -20,7 +20,7 @@ class MyChat implements MessageComponentInterface {
 
 		$payload = json_decode( $msg , true);
 		foreach($payload as $k=>$v) {
-			$payload[$k] = htmlspecialchars(strip_tags($v));
+			$payload[$k] = htmlentities(strip_tags($v),ENT_NOQUOTES);
 		}
 		$msg = json_encode($payload);
 
@@ -29,8 +29,8 @@ class MyChat implements MessageComponentInterface {
 				foreach ($this->clients as $client) {
 					if ($client !== $from) {
 						$client->send( $msg );
-					} else {
-						$this->clients->setInfo(['nickname'=>strip_tags($payload['nickname'])]);
+					} else { // $client is $from
+						$this->clients[$from] = ['nickname'=>strip_tags($payload['nickname'])];
 					}
 				}
 				break;
@@ -44,10 +44,8 @@ class MyChat implements MessageComponentInterface {
 
 	public function onClose(ConnectionInterface $conn) {
 		$info = null;
-		foreach($this->clients as $client) {
-			if ($client === $conn) {
-				$info = $this->clients->getInfo();
-			}
+		if ($this->clients[$conn]) {
+			$info = $this->clients[$conn];
 		}
 		$this->clients->detach($conn);
 		if ($info && $info['nickname']) {
@@ -55,7 +53,6 @@ class MyChat implements MessageComponentInterface {
 				$client->send(json_encode( ['action'=>'logoff','nickname'=>$info['nickname']]));
 			}
 		}
-
 	}
 
 	public function onError(ConnectionInterface $conn, Exception $e) {
