@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="de_DE">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <title>Chat</title>
+    <link href="main.css" rel="stylesheet">
+</head>
+<body>
+
+    <ul id="chat">
+
+    </ul>
+    <form>
+        <input id="msg" type="text">
+        <input type="submit" value="send"/>
+    </form>
+
+    <script type="text/javascript">
+        var conn = new WebSocket('ws://127.0.0.1:8080/chat');
+        let nickname = '';
+        conn.onopen = function(ev) {
+            nickname = prompt('your nickname');
+            if (nickname) {
+                let payload = {
+                    action: 'login',
+                    nickname: nickname
+                }
+                conn.send(JSON.stringify(payload));
+            }
+        }
+        conn.onmessage = function(ev) {
+
+            let payload = JSON.parse(ev.data);
+            let li = document.createElement('li');
+
+            console.log(payload);
+            switch (payload.action) {
+                case 'login':
+                    li.classList.add('system');
+                    li.innerText = payload.nickname + ' ' + 'logged in';
+                    break;
+                case 'logoff':
+                    li.classList.add('system');
+                    li.innerText = payload.nickname + ' ' + 'logged out';
+                    break;
+                case 'msg':
+                    li.classList.add('msg');
+                    let nick = document.createElement('span');
+                    let msg = document.createElement('span');
+                    nick.innerText = payload.nickname;
+                    msg.innerText = payload.msg;
+                    li.append(nick);
+                    li.append(msg);
+                    if (payload.nickname === nickname) {
+                        li.classList.add('me');
+                    }
+                    break;
+            }
+
+            document.getElementById('chat').append(li);
+            document.getElementById('chat').scrollTop = document.getElementById('chat').lastElementChild.offsetTop;
+
+        }
+        document.querySelector('form').addEventListener('submit',function(ev) {
+           ev.stopPropagation();
+           ev.preventDefault();
+           let payload = {
+               action: 'msg',
+               msg: document.getElementById('msg').value,
+               nickname: nickname
+           };
+           conn.send(JSON.stringify(payload));
+           document.getElementById('msg').value = '';
+        });
+    </script>
+</body>
+</html>
