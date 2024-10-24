@@ -15,7 +15,7 @@
     <script type="text/javascript">
         var conn = new WebSocket('ws://127.0.0.1:8080/echo');
         conn.onopen = function(ev) {
-            conn.send('hi ho');
+            conn.send('hello');
         }
         conn.onmessage = function(ev) {
             let li=document.createElement('li');
@@ -25,7 +25,7 @@
         document.querySelector('button').addEventListener('click',function() {
            if (conn) {
                let date = new Date();
-               conn.send(date.toLocaleDateString() + ' ' +  date.toLocaleTimeString() +' hello Poland');
+               conn.send(date.toLocaleDateString() + ' ' +  date.toLocaleTimeString() +' Hello Poland, welcome to step 1');
            }
         });
     </script>
